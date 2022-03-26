@@ -51,6 +51,10 @@ async fn main() -> Result<()> {
         "event": "HEALTH",
     })).await?;
 
+    client.raw_client.send_data("stop_game", &json!({
+        "game": "RAW_CLIENT_HEALTH",
+    })).await?;
+
     client.raw_client.send_data("remove_game", &json!({
         "game": "RAW_CLIENT_HEALTH",
     })).await?;
