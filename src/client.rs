@@ -7,8 +7,8 @@ use tokio::{task::JoinHandle, time::MissedTickBehavior};
 
 #[derive(Debug)]
 pub struct GameSenseClient {
-    raw_client: Arc<RawGameSenseClient>,
-    game: String,
+    pub raw_client: Arc<RawGameSenseClient>,
+    pub game: String,
     heartbeat: Option<JoinHandle<()>>,
 }
 
