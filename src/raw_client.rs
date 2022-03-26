@@ -7,6 +7,7 @@ use serde_with::{serde_as, Bytes};
 #[cfg(any(target_os = "windows", target_os = "macos"))]
 use std::fs;
 use std::{fmt::Debug, future::Future};
+use std::path::PathBuf;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EngineConfig {
@@ -219,8 +220,14 @@ impl RawGameSenseClient {
         let path = "/Library/Application Support/SteelSeries Engine 3/coreProps.json";
 
         #[cfg(target_os = "windows")]
-        let path =
-            std::env::var("PROGRAMDATA")? + "/SteelSeries/SteelSeries Engine 3/coreProps.json";
+        let path = {
+            let path = PathBuf::from(std::env::var("PROGRAMDATA")? + "/SteelSeries/GG/coreProps.json");
+            if path.exists() {
+                path
+            } else {
+                PathBuf::from(std::env::var("PROGRAMDATA")? + "/SteelSeries/SteelSeries Engine 3/coreProps.json")
+            }
+        };
 
         let config = fs::read_to_string(path)?;
         let config = serde_json::from_str::<EngineConfig>(&config)?;
