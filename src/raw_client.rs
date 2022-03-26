@@ -8,8 +8,6 @@ use serde_with::{serde_as, Bytes};
 use std::fs;
 use std::{fmt::Debug, future::Future};
 
-#[cfg(any(target_os = "windows", target_os = "macos"))]
-use anyhow::anyhow;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EngineConfig {
     pub address: String,
