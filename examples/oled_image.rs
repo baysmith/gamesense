@@ -5,9 +5,10 @@ use anyhow::Result;
 use gamesense::{client::GameSenseClient, handler::screen};
 use serde_json::json;
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let mut client =
-        GameSenseClient::new("SCREEN_IMAGE", "Example OLED Image Event", "ptrstr", None)?;
+        GameSenseClient::new("SCREEN_IMAGE", "Example OLED Image Event", "ptrstr", None).await?;
 
     let width = 128;
     let height = 40;
@@ -30,10 +31,10 @@ fn main() -> Result<()> {
         ),
     );
 
-    client.bind_event("EVENT", None, None, None, None, vec![handler])?;
+    client.bind_event("EVENT", None, None, None, None, vec![handler]).await?;
     client.start_heartbeat();
 
-    client.trigger_event_frame("EVENT", 0, json!({}))?;
+    client.trigger_event_frame("EVENT", 0, json!({})).await?;
 
     client.stop_heartbeat()?;
     Ok(())

@@ -6,8 +6,9 @@ use gamesense::client::GameSenseClient;
 use gamesense::handler::screen;
 use serde_json::json;
 
-fn main() -> Result<()> {
-    let mut client = GameSenseClient::new("EVENT_SCREEN", "Example OLED Event", "ptrstr", None)?;
+#[tokio::main]
+async fn main() -> Result<()> {
+    let mut client = GameSenseClient::new("EVENT_SCREEN", "Example OLED Event", "ptrstr", None).await?;
 
     let handler = screen::ScreenHandler::new("screened", "one",
         screen::ScreenDataDefinition::StaticScreenDataDefinition(screen::StaticScreenDataDefinition(
@@ -56,20 +57,20 @@ fn main() -> Result<()> {
         ))
     );
 
-    client.bind_event("EVENT", None, None, None, None, vec![handler])?;
+    client.bind_event("EVENT", None, None, None, None, vec![handler]).await?;
     client.start_heartbeat();
 
     client.trigger_event_frame("EVENT", 0, json!({
         "kills": 23,
         "headshots": 7,
-    }))?;
+    })).await?;
 
     std::thread::sleep(std::time::Duration::from_secs(7));
 
     client.trigger_event_frame("EVENT", 0, json!({
         "kills": 24,
         "headshots": 8,
-    }))?;
+    })).await?;
 
     client.stop_heartbeat()?;
     Ok(())
